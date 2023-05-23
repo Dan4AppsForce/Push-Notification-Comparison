@@ -1,5 +1,5 @@
 package com.setupdemoproject;
-
+import com.intercom.reactnative.IntercomModule;
 import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -58,5 +58,6 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    IntercomModule.initialize(this, "apiKey", "appId");
   }
 }

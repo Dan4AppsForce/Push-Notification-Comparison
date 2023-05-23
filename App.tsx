@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Alert,
+  AppState,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -28,6 +29,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Intercom from '@intercom/intercom-react-native';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -76,14 +78,23 @@ function App(): JSX.Element {
       console.log(fcmToken);
     }
   }
-  useEffect(() => {
-    checkToken();
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage);
-      Alert.alert('A new FCM message arrived!', remoteMessage.notification?.body);
-    });
+  // useEffect(() => {
+  //   checkToken();
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     console.log(remoteMessage);
+  //     Alert.alert('A new FCM message arrived!', remoteMessage.notification?.body);
+  //   });
 
-      return unsubscribe;
+  //     return unsubscribe;
+  // }, []);
+
+  useEffect(() => {
+    AppState.addEventListener(
+      'change',
+      (nextAppState) => 
+        nextAppState === 'active' && Intercom.handlePushMessage()
+    );
+    
   }, []);
 
   const backgroundStyle = {
@@ -140,6 +151,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+    backgroundColor: '#ffff'
   },
 });
 
